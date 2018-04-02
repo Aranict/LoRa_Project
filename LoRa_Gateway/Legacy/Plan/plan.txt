@@ -1,0 +1,68 @@
+Plan
+
+Kieran Cooper
+14036784
+
+Wk beginning 23rd Oct
+
+Board purchased and delivered. (done)
+Board spec read and gotten to grips with (ongoing)
+Plan created (ongoing)
+Non-functional requirements written (ongoing)
+Ethical checklist done and reviewed (ongoing)
+Research and start of Literature Review (ongoing)
+LoRaWAN module acquired (pending)
+
+Wk beginning 30th Oct
+
+First phase start (LoRaWAN functionality)
+LoRaWAN module talking to board (gateway functioning at basic level)
+LoRa node acquired
+Progress on Literature Review (~30%)
+
+Wk beginning 6th Nov
+
+Node can ping gateway
+Literature Review progress (~60%)
+
+Wk beginning 13th Nov
+
+SD card reader talking to board
+Literature Review complete
+
+Wk beginning 20th Nov
+
+Board can write data to SD card in human readable format (Parse tool required?)
+
+Wk beginning 27th Nov
+
+GPS module added to node
+Gateway receiving GPS data
+
+Wk beginning 4th Dec
+
+Node autonomy
+multi-node test (feasible?)
+Range test (necessary?)
+
+Wk beginning 11th Dec
+
+first phase complete (LoRaWAN functionality)
+Write-up
+Second phase start (Map integration)
+Planning map solution
+Set up local webserver on laptop/pc
+
+Wk beginning 18th Dec
+
+port data from sd card to CSV
+
+Wk beginning 25th Dec (yay christmas)
+
+embed google map
+
+Wk beginning 1st Jan + following weeks
+
+write-up
+Verification
+Testing

@@ -1,0 +1,89 @@
+﻿Intro
+
+The original intent of this project was to create a LoRa gateway on a low-power board that would be capable of functioning with no internet connection. 
+Through various circumstances, the project has changed substantially over the course of development but retains this key underpinning.
+
+Originally, I had planned to create a LoRaWAN gateway using the ST Nucleo f411RE alongside an SPI version of IMST's ic880a concentrator board.
+This plan eventually fell apart, in part due to my own inability to see the project to completion and in part due to fundamental incompatabilities between the two pieces of technology.
+That is not to say that these incompatabilities could not have been worked through, however with the time remaining to me when these incompatabilities made themselves known, it was infeasable to continue developing along that path. 
+
+In no particular order, these problems were: 
+The ic880a Hardware Abstraction Layer (HAL) is designed to function on a raspberry pi running Raspbian. This was the first major hurdle as the board I was developing for (the ST Nucleo F411RE) was unable to run any flavour of linux. 
+Attempting to port the HAL from raspbian to any flavour of linux would have surely had its own suite of problems, however the author is confident that these would have been able to be worked through in a reasonable timeframe.
+
+Thus the aim of the project shifted from its original goal to simply getting the ic880a HAL functioning on the ST Nucleo board.
+
+mbed
+
+The ST Nucleo board has a (unique?) development environment known as mbed. 
+This is an interfacing layer that sits on top of the hardware and provides a simple and clean way to do bare metal programming on various ARM affiliated boards.
+mbed has its own libraries and utilities that are available to developers and these tend to be fairly good.
+There is an online compiler for the mbed platform that supports many different boards.
+
+The key feature of mbed, however, is that mbed enabled boards present themselves to modern operating systems as a USB mass storage device, and the ability of the online compiler to output a binary file that can be dragged and dropped onto this device to program it.
+
+
+libloragw
+
+The ic880a HAL is known as libloragw and can be found at here: [link]
+The primary incompatability between the HAL and the mbed platform is the use of POSIX specific functionality within the source code.
+This would be fine were the ST Nucleo board running a flavour of linux, but as it was not it was necessary to replace all POSIX specific code with a different implementation. 
+Another issue was that the SPI functions present in the HAL made use of the IOCTL system call which is UNIX specific.  
+As a result it was necessary to rewrite all of the SPI functions using the mbed versions. 
+
+
+small changes to ensure HAL compiled. 
+
+In the end, having made these changes and bypassing various version checks, the HAL would be able to load firmware but failed on reading it back. 
+At this point the decision was made to suspend development on the Nucleo board and opt for something that would not cause so many issues.
+
+
+
+//NEW STUFF
+
+--LoRa gateway functionality
+TODO: write this bit - RESEARCH ic880a
+ 
+The IMST ic880a LoRa concentrator board is a 14 channel radio transceiver capable of transmitting and receiving on a variety of different frequencies. As the author is based in Europe, the frequency used for LoRa transmissions is 868 mz. 
+
+-RESEARCH LORAWAN PROTOCOL
+ --chirping
+ --stuff from poster
+IOTBIT --
+
+With development of the HAL port suspended, it was necessary to quickly develop an alternate project. As The ic880a board was intended for use with
+a Raspberry Pi, I elected to create a gateway using these two boards and the addition of the IOTBit RPi hat. The IOTBit is a plugin board available 
+for the Raspberry pi that contains a modem and support for a sim card. It allows the Raspberry pi to use the mobile network infrastructure to connect
+to the internet. Whilst not truly an offline gateway, the mobile network support would allow connectivity in places where before that was impossible.
+
+--MORE ON IOTBIT HARDWARE
+The IOTBit hat made use of the GobiSerial modem driver. The hat came with a convenient series of scripts to expediate development and I made use of 
+these. The script pulled the GobiSerial repo and built it, however there was a problem with the compilation. It was necessary for me to remove a line 
+of code from the GobiSerial source file in order to solve a dependenct issue. This line was simply some module author identification however, and did 
+not seem necessary for the correct functioning of the driver.
+
+With the driver functional, it was then necessary to configure the mobile network connection. Wvdial is a PPP driver written to make connecting via dial-up 
+much simpler. I ran apt-get install WVdial and after it finished installing I edited wvdial.conf to reflect the settings required by the IOTBit. The wvdial config 
+file can be found in appendix[$appendix].
+
+Wvdial is a driver for the PPP daemon necessary for dial-up internet connections
+TODO: FACT CHECK DIALUP STUFF, RESEARCH PPP/WVDIAL
+
+With the IOTBit hat functioning correctly, the raspberry pi could connect to the internet using a 4g mobile connection. This in turn meant that the gateway could 
+also connect to the internet, and push packets to the things network online platform. 
+
+PPP daemon
+ -conf
+WVdial PPP driver
+GobiSerial modem driver
+invoke gateway from /opt/ttn-gateway/bin/start.sh
+
+LoPy Node --
+micropython
+LoRa stack
+REPL
+
+The Things Network --
+Application/Gateway/Node EUI/key
+
+
